@@ -9,6 +9,9 @@ import { WindowRef } from '../app/service/window.service';
 })
 export class AppComponent {
   @ViewChild("spreadsheet") spreadsheet: ElementRef;
+  table:any;
+  tableData :any = [];
+  eachRow :any = new Array();
   constructor(
     private winRef: WindowRef
   ){
@@ -32,7 +35,7 @@ export class AppComponent {
 
   ngAfterViewInit() {
 
-    var table = jexcel(this.spreadsheet.nativeElement, {
+    this.table = jexcel(this.spreadsheet.nativeElement, {
       data:this.data,
       minDimensions: [4,10],
       columnDrag:true,
@@ -43,5 +46,21 @@ export class AppComponent {
       }]
     });
   }
-
+  click(){
+    //get table data
+      this.table.records.forEach(row => {
+        if (Array.isArray(row)) {
+          row.forEach(cell => {
+            if (cell.cellIndex > 1 && cell.innerHTML !== "") {
+              this.eachRow.push(parseInt(cell.innerText));
+            } else {
+              this.eachRow.push(cell.innerText);
+            }
+          })
+          this.tableData.push(this.eachRow);
+          this.eachRow = [];
+        }
+      });
+      console.log(this.tableData)
+    }
 }
