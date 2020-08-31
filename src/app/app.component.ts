@@ -37,14 +37,18 @@ export class AppComponent {
 
     this.table = jexcel(this.spreadsheet.nativeElement, {
       data:this.data,
-      minDimensions: [4,10],
       columnDrag:true,
       editable:false,
+      fullscreen:true,
+      search:true,
+      filters:true,
+      colAlignments:['left','center','left','center'],
       footers: [['Total','=SUMCOL(TABLE(), COLUMN())','=SUMCOL(TABLE(), COLUMN())','=SUMCOL(TABLE(), COLUMN())']],
       columns: [{
           width:'200px',
       }]
     });
+    this.getData();
   }
   click(){
     //get table data
@@ -61,6 +65,10 @@ export class AppComponent {
           this.eachRow = [];
         }
       });
-      console.log(this.tableData)
+      return this.tableData;
     }
+    getData (){
+      let data = this.click();
+      console.log(data);  
+      }
 }
